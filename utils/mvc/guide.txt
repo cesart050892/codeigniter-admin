@@ -1,0 +1,2 @@
+Crear las carpetas principales:
+API, WEB, BACKUP
