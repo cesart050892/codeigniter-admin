@@ -3,3 +3,6 @@ API, WEB, BACKUP
 
 copiar el archivo env
 renombrar a .env
+
+crear acceso a la vista inicial desde
+controlador web > home
