@@ -1,2 +1,5 @@
-Crear las carpetas principales:
+crear las carpetas principales:
 API, WEB, BACKUP
+
+copiar el archivo env
+renombrar a .env
