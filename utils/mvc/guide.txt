@@ -16,3 +16,5 @@ crear vista de login usando la herramienta layout
 estilizar la pagina login a nuestra necesidades
 
 crear vista de dashboard usando la herramienta layout
+
+crear manejadores de las vistas 404 
