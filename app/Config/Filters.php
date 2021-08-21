@@ -2,6 +2,9 @@
 
 namespace Config;
 
+use App\Filters\APIhasNotBeen;
+use App\Filters\HasAlready;
+use App\Filters\HasNotBeen;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
@@ -19,6 +22,9 @@ class Filters extends BaseConfig
 		'csrf'     => CSRF::class,
 		'toolbar'  => DebugToolbar::class,
 		'honeypot' => Honeypot::class,
+		'auth' => HasNotBeen::class,
+		'noauth' => HasAlready::class,
+		'api'	=> APIhasNotBeen::class
 	];
 
 	/**
@@ -31,6 +37,7 @@ class Filters extends BaseConfig
 		'before' => [
 			// 'honeypot',
 			// 'csrf',
+			'auth' => ['except' => [ 'api' , 'api/auth/*', '/']] // 'register', 'forgot', 'recovery'
 		],
 		'after'  => [
 			'toolbar',
