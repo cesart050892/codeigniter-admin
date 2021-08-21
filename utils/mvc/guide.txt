@@ -24,3 +24,5 @@ crear migracion de usuarios
 crear modelo de usuarios
 
 crear entidad de usuarios
+
+crear metodo registrar en controlador usuarios

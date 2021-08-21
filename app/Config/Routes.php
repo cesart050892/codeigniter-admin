@@ -20,7 +20,7 @@ $routes->setDefaultNamespace('App\Controllers\Web');
 $routes->setDefaultController('Home');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
-$routes->set404Override('App\Controllers\Errors::index');
+$routes->set404Override();
 $routes->setAutoRoute(true);
 
 /*
@@ -33,6 +33,17 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'Auth::login');
 $routes->get('dashboard', 'Dashboard::index');
+
+
+$routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes) {
+
+	$routes->group('auth', function ($routes) {
+		$routes->get('hi', 'Auth::index');
+
+		$routes->post('signup', 'Auth::signup');
+		$routes->post('login', 'Auth::login');
+	});
+});
 
 /*
  * --------------------------------------------------------------------
