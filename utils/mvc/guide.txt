@@ -6,3 +6,5 @@ renombrar a .env
 
 crear acceso a la vista inicial desde
 controlador web > home
+
+agregar archivos publicos de AdminLTE

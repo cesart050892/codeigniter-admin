@@ -101,10 +101,9 @@ _modules/*
 
 # Netbeans
 nbproject/
-build/
+nonbuild/
 nbbuild/
-# dist
-ndist/
+nondist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
