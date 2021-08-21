@@ -90,7 +90,7 @@
 
                 <form autocomplete="off">
                     <div class="input-group mb-3">
-                        <input type="user" class="form-control" placeholder="User">
+                        <input type="user" class="form-control user" placeholder="User">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-user"></span>
@@ -98,7 +98,7 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" class="form-control pass" placeholder="Password">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -135,3 +135,66 @@
     </div>
     <!-- /.login-box -->
 <?= $this->endSection() ?>
+
+
+<?= $this->section('script') ?>
+  <script>
+
+    var isCtrl = false;
+    document.onkeyup = function(e) {
+      if (e.which == 17) isCtrl = false;
+      console.log('onkeyup 17')
+    }
+    document.onkeydown = function(e) {
+      if (e.which == 17) {
+        isCtrl = true;
+        console.log('onkeydown 17')
+      };
+      if (e.which == 83 && isCtrl == true) {
+        console.log('onkeydown 83')
+        return false;
+      }
+    }
+    $("form").on("submit", function(event) {
+      event.preventDefault();
+      var val = checkInputs(this)
+      if (val.valid) execute(val);
+    });
+
+    function enterUsage(e) {
+      if (e.which == 13) {
+        event.preventDefault();
+        var val = checkInputs(this)
+        if (val.valid) execute(val);
+      }
+    }
+
+    function execute(request) {
+      $.ajax({
+        type: 'POST',
+        url: "<?= base_url('api/auth/login') ?>",
+        data: {
+          username: request.user,
+          password: request.pass,
+          username: request.user,
+          password: request.pass
+        },
+        dataType: "json",
+        success: function(response) {
+          location.reload(true);
+        }
+      });
+    }
+
+    function checkInputs(form) {
+      var user = $(".user").val();
+      var pass = $(".pass").val();
+      return {
+        valid: true,
+        user: user,
+        pass: pass,
+        form: form
+      }
+    }
+  </script>
+  <?= $this->endSection() ?>
