@@ -20,7 +20,7 @@ $routes->setDefaultNamespace('App\Controllers\Web');
 $routes->setDefaultController('Home');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
-$routes->set404Override();
+$routes->set404Override('App\Controllers\Errors');
 $routes->setAutoRoute(false);
 
 /*
@@ -32,7 +32,7 @@ $routes->setAutoRoute(false);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Auth::login');
-$routes->get('dashboard', 'Dashboard::index');
+$routes->get('dashboard', 'Dashboard::index', ['filter' => 'auth']);
 
 
 $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes) {
@@ -40,6 +40,8 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
 		$routes->post('signup', 'Auth::signup');
 		$routes->post('login', 'Auth::login');
 	});
+
+	$routes->get('me', 'User::profile', ['filter' => 'api']);
 });
 
 /*
