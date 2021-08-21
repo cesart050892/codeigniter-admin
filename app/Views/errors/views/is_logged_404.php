@@ -1,8 +1,7 @@
-<?= $this->extend('layout/main') ?>
+<?= $this->extend('app/layout/main') ?>
 
-<?= $this->section('jquery') ?>
-<!-- jQuery -->
-<script src="<?= base_url("/plugins/jquery/jquery.min.js") ?>"></script>
+<?= $this->section('content') ?>
+<title> AdminLTE | Error 404</title>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
