@@ -20,3 +20,5 @@ crear vista de dashboard usando la herramienta layout
 crear manejadores de las vistas 404
 
 crear migracion de usuarios
+
+crear modelo de usuarios
