@@ -12,3 +12,5 @@ agregar archivos publicos de AdminLTE
 crear estructura de las vistas, y plantillas
 
 crear vista de login usando la herramienta layout
+
+estilizar la pagina login a nuestra necesidades
