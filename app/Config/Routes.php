@@ -41,7 +41,10 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
 		$routes->post('login', 'Auth::login');
 	});
 
-	$routes->get('me', 'User::profile', ['filter' => 'api']);
+	$routes->group('me', ['namespace' => 'App\Controllers\Api', 'filter' => 'api'], function ($routes) {
+		$routes->get('/', 'User::profile');
+		$routes->get('logout', 'User::logout');
+	});
 });
 
 /*
