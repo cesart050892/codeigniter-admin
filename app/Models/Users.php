@@ -11,7 +11,7 @@ class Users extends Model
 	protected $primaryKey           = 'id';
 	protected $useAutoIncrement     = true;
 	protected $insertID             = 0;
-	protected $returnType           = 'array';
+	protected $returnType           = 'App\Entities\Users';
 	protected $useSoftDeletes       = false;
 	protected $protectFields        = true;
 	protected $allowedFields        = ['name', 'surname', 'display_name', 'email', 'img', 'username' ,'password'];
