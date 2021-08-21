@@ -8,3 +8,5 @@ crear acceso a la vista inicial desde
 controlador web > home
 
 agregar archivos publicos de AdminLTE
+
+crear estructura de las vistas, y plantillas
