@@ -16,6 +16,7 @@ class User extends ResourceController
         try {
             //
             $user = $this->model->find(session()->user_id);
+            $user->ignorePass();
             return $this->respond($user);
         } catch (\Throwable $th) {
             //throw $th;

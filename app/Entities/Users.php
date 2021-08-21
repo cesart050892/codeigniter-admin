@@ -6,7 +6,9 @@ use CodeIgniter\Entity\Entity;
 
 class Users extends Entity
 {
-	protected $datamap = [];
+	protected $datamap = [
+		'fullname' => 'display_name'
+	];
 	protected $dates   = [
 		'created_at',
 		'updated_at',
@@ -17,6 +19,11 @@ class Users extends Entity
 	protected function setPassword(string $password)
 	{
 		$this->attributes['password'] = password_hash($password, PASSWORD_BCRYPT);
+		return $this;
+	}
+
+	public function ignorePass(){
+		unset($this->attributes['password']);
 		return $this;
 	}
 }
