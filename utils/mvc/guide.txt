@@ -10,3 +10,5 @@ controlador web > home
 agregar archivos publicos de AdminLTE
 
 crear estructura de las vistas, y plantillas
+
+crear vista de login usando la herramienta layout
