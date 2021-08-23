@@ -33,6 +33,7 @@ $routes->setAutoRoute(false);
 // route since we don't have to scan directories.
 $routes->get('/', 'Auth::login', ['filter' => 'noauth']);
 $routes->get('dashboard', 'Dashboard::index', ['filter' => 'auth']);
+$routes->get('clients', 'Clients::index', ['filter' => 'auth']);
 
 
 $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes) {
@@ -41,13 +42,17 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
 		$routes->post('signup', 'Auth::signup');
 		$routes->post('login', 'Auth::login');
 	});
-	$routes->group('v1', ['namespace' => 'App\Controllers\Api','filter' => ['api']], function ($routes) {
+	$routes->group('v1', ['namespace' => 'App\Controllers\Api','filter' => 'api'], function ($routes) {
 		$routes->group('me', function ($routes) {
 			$routes->get('/', 'User::profile');
 			$routes->get('logout', 'User::logout');
 		});
 		$routes->group('users', function ($routes) {
 			$routes->get('/', 'User::index');
+		});
+
+		$routes->group('clients', function ($routes) {
+			$routes->get('/', 'Clients::index');
 		});
 	});
 });

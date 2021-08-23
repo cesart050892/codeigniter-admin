@@ -13,6 +13,7 @@
     <?= $this->renderSection('css') ?>
     <!-- Theme style -->
     <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+    <?= $this->renderSection('style') ?>
 </head>
 
 <body class="hold-transition sidebar-mini">

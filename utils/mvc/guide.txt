@@ -34,3 +34,5 @@ optimizar los datos entregados del perfil
 crear el metodo todos los usuarios de la api
 
 crear entorno protegido de la api
+
+crear ruta y vista de cliente
