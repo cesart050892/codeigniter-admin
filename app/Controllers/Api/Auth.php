@@ -30,8 +30,8 @@ class Auth extends ResourceController
 					"username"	=> $this->request->getVar("username"),
 					"email"		=> $this->request->getVar("email"),
 					"password"	=> $this->request->getVar("password"),
+					'display' 		=>	''
 				];
-				$data += ['display_name' => $this->request->getVar("name") . " " . $this->request->getVar("surname")];
 				$user = new \App\Entities\Users($data);
 				unset($data);
 				if ($this->model->save($user)) {

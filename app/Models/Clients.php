@@ -4,17 +4,17 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class Users extends Model
+class Clients extends Model
 {
 	protected $DBGroup              = 'default';
-	protected $table                = 'users';
+	protected $table                = 'clients';
 	protected $primaryKey           = 'id';
 	protected $useAutoIncrement     = true;
 	protected $insertID             = 0;
 	protected $returnType           = 'App\Entities\Clients';
 	protected $useSoftDeletes       = false;
 	protected $protectFields        = true;
-	protected $allowedFields        = ['name', 'surname', 'display_name', 'email1', 'email2', 'phone1', 'phone2', 'ruc'];
+	protected $allowedFields        = ['name', 'surname', 'display', 'email1', 'email2', 'phone1', 'phone2', 'ruc'];
 
 	// Dates
 	protected $useTimestamps        = true;

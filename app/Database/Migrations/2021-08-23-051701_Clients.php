@@ -4,9 +4,9 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Users extends Migration
+class Clients extends Migration
 {
-	protected $name = 'users';
+	protected $name = 'clients';
 
 	public function up()
 	{
@@ -28,24 +28,32 @@ class Users extends Migration
 			'display'	=> [
 				'type'       => 'VARCHAR',
 				'constraint' => '75',
+				'null'       => true
 			],
-			'img'	=> [
+			'phone1'	=> [
 				'type'       => 'VARCHAR',
-				'constraint' => '75',
-				'default'    => '/img/default/profile.jpg'
+				'constraint' => '150',
+				'null'       => true
 			],
-			'email'	=> [
+			'phone2'	=> [
+				'type'       => 'VARCHAR',
+				'constraint' => '150',
+				'null'       => true
+			],
+			'email1'	=> [
+				'type'       => 'VARCHAR',
+				'constraint' => '150',
+				'null'       => true
+			],
+			'email2'	=> [
 				'type'       => 'VARCHAR',
 				'constraint' => '150',
 			],
-			'username'	=> [
+			'ruc'	=> [
 				'type'       => 'VARCHAR',
-				'constraint' => '75',
+				'constraint' => '150',
+				'null'       => true
 			],
-			'password'	=> [
-				'type'       => 'VARCHAR',
-				'constraint' => '255',
-			]
 		]);
 		$this->forge->addKey('id', true);
 		$this->forge->addField("created_at DATETIME NULL DEFAULT NULL");
