@@ -178,7 +178,112 @@
   }
 
   function btnEdit() {
+    let form = renderForm('Edit', 'warning', '.modal-body')
+    let type = renderSelect('type')
+    let brand = renderSelect('brand')
+    let model = renderTextbox('model')
+    form.prepend(model).prepend(brand).prepend(type)
+    $(`.sCType`).select2({
+      dropdownParent: `#myModal`,
+      width: '100%',
+      minimumInputLenght: 2,
+      placeholder: {
+        id: '-1', // the value of the option
+        text: 'Select a type'
+      },
+      allowClear: true
+    });
+    $(`.sCBrand`).select2({
+      dropdownParent: `#myModal`,
+      width: '100%',
+      minimumInputLenght: 2,
+      placeholder: {
+        id: '-1', // the value of the option
+        text: 'Select a brand'
+      },
+      allowClear: true
+    });
+    $('#myModal').modal('show')
+    $('.modal-title').html('Edit')
+  }
 
+  function renderForm(button, color, into = null) {
+    let el = $('<form>').append($('<button>', {
+      'type': 'submit',
+      'class': `btn btn-${color}`,
+      'text': `${capitalize(button)}`
+    }))
+    if (into != null) {
+      el.appendTo(into)
+    }
+    return el;
+  }
+
+  function renderTextbox(field) {
+    let el = $('<div>', {
+        'class': 'form-group',
+      }).append($(
+        '<label>', {
+          prop: {
+            for: `${field}`
+          },
+          'html': `${capitalize(field)}`
+        }
+      ))
+      .append($(
+        '<input>', {
+          'type': 'text',
+          'class': 'form-control',
+          prop: {
+            name: `${field}`,
+            placeholder: `${capitalize(field)}`
+          }
+        }
+      ));
+    return el;
+  }
+
+  function renderSelect(field, modal) {
+    let el = $('<div>', {
+      'class': 'form-group',
+    }).append($(
+      '<label>', {
+        prop: {
+          for: `${field}`
+        },
+        'html': `${capitalize(field)}`
+      }
+    )).append($('<select>', {
+      'class': `sC${capitalize(field)}`,
+      'id': `${field}`,
+      prop: {
+        name: `${field}`
+      }
+    }))
+    return el;
+  }
+
+  function capitalize(param) {
+    return param.charAt(0).toUpperCase() + param.slice(1)
   }
 </script>
-<?= $this->endSection('script') ?>
+<?= $this->endSection() ?>
+
+<?= $this->section('modal') ?>
+<!-- Modal -->
+<div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /. Modal -->
+<?= $this->endSection() ?>
