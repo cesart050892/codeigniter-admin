@@ -30,3 +30,5 @@ crear metodo registrar en controlador usuarios
 crear el metodo perfil de la api
 
 optimizar los datos entregados del perfil
+
+crear el metodo todos los usuarios de la api

@@ -20,6 +20,7 @@ class User extends ResourceController
             return $this->respond($user);
         } catch (\Throwable $th) {
             //throw $th;
+            return $this->failServerError();
         }
     }
 
@@ -33,6 +34,20 @@ class User extends ResourceController
                 'message'    => 'See you next time!',
                 'data'        => null
             ));
+        } catch (\Throwable $th) {
+            //throw $th;
+            return $this->failServerError();
+        }
+    }
+
+    public function index()
+    {
+        try {
+            $users = $this->model->findAll();
+            foreach ($users as $user) {
+                $user->ignorePass();
+            }
+            return $this->respond($users);
         } catch (\Throwable $th) {
             //throw $th;
             return $this->failServerError();
