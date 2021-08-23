@@ -42,17 +42,19 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
 		$routes->post('signup', 'Auth::signup');
 		$routes->post('login', 'Auth::login');
 	});
-	$routes->group('v1', ['namespace' => 'App\Controllers\Api','filter' => 'api'], function ($routes) {
+	$routes->group('v1', ['namespace' => 'App\Controllers\Api', 'filter' => 'api'], function ($routes) {
 		$routes->group('me', function ($routes) {
 			$routes->get('/', 'User::profile');
 			$routes->get('logout', 'User::logout');
 		});
 		$routes->group('users', function ($routes) {
 			$routes->get('/', 'User::index');
+			$routes->get('delete/(:num)', 'User::delete/$1');
 		});
 
 		$routes->group('clients', function ($routes) {
 			$routes->get('/', 'Clients::index');
+			$routes->get('delete/(:num)', 'Clients::delete/$1');
 		});
 	});
 });

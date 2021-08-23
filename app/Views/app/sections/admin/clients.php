@@ -135,9 +135,6 @@
           return `
           <div class='text-center'>
           <div class='btn-group'>
-          <button class='btn btn-primary btn-sm' onClick="btnProfile(${data.id})">
-          <i class="fas fa-binoculars"></i>
-          </button>
           <button class='btn btn-warning btn-sm' onClick="btnEdit(${data.id})">
           <i class="fas fa-edit"></i>
           </button>
@@ -157,5 +154,31 @@
       className: "selected-row"
     }
   });
+
+  function btnDelete(id) {
+    Swal.fire({
+      title: 'Are you sure?',
+      // text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      $.get(baseUrl + '/api/v1/clients/delete/' + id,
+        (response) => {
+          Swal.fire(
+            'Deleted!',
+            'Your file has been deleted.',
+            'success'
+          )
+          table.ajax.reload(null, false);
+        })
+    })
+  }
+
+  function btnEdit() {
+
+  }
 </script>
 <?= $this->endSection('script') ?>

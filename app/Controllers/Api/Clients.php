@@ -23,4 +23,17 @@ class Clients extends ResourceController
             return $this->failServerError();
         }
     }
+
+    public function delete($id = null)
+    {
+        try {
+            $clients = $this->model->delete($id);
+            return $this->respond(array(
+                'message' => 'delete'
+            ));
+        } catch (\Throwable $th) {
+            //throw $th;
+            return $this->failServerError();
+        }
+    }
 }
