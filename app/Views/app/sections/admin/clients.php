@@ -104,7 +104,6 @@
       type: "GET",
       url: baseUrl + '/api/v1/clients',
       dataSrc: function(response) {
-        dataSrc_Ajax = response.data;
         return response.data;
       },
     },
@@ -118,24 +117,16 @@
         data: null,
         title: "Client",
         render: function(data) {
-          return `${data.fullname}}`;
+          return `${data.fullname}`;
         },
       },
       {
-        data: "email",
+        data: "email-personal",
         title: "Email"
       },
       {
-        data: "phone",
+        data: "phone-personal",
         title: "Phone"
-      },
-      {
-        data: "company",
-        title: "Company"
-      },
-      {
-        data: "member_since",
-        title: "Member since"
       },
       {
         data: null,

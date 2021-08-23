@@ -38,3 +38,5 @@ crear entorno protegido de la api
 crear ruta y vista de cliente
 
 crear el modelo y entidad del cliente
+
+craer controlador, metodo index y vista datatables
