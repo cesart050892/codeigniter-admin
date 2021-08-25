@@ -35,6 +35,12 @@ $routes->get('/', 'Auth::login', ['filter' => 'noauth']);
 $routes->get('dashboard', 'Dashboard::index', ['filter' => 'auth']);
 $routes->get('clients', 'Clients::index', ['filter' => 'auth']);
 
+$routes->get('admin', 'Admin::index', ['filter' => 'auth']);
+$routes->get('sales', 'Sales::index', ['filter' => 'auth']);
+$routes->get('reports', 'Reports::index', ['filter' => 'auth']);
+$routes->get('users', 'Users::index', ['filter' => 'auth']);
+$routes->get('products', 'Products::index', ['filter' => 'auth']);
+
 
 $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes) {
 

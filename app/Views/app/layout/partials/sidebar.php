@@ -36,7 +36,7 @@
                         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                         <li class="nav-item">
-                            <a href="../widgets.html" class="nav-link">
+                            <a href="users" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
                                     Users
@@ -45,7 +45,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="../widgets.html" class="nav-link">
+                            <a href="clients" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
                                     Clients
@@ -54,7 +54,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="../widgets.html" class="nav-link">
+                            <a href="products" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
                                     Products
@@ -63,7 +63,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="../widgets.html" class="nav-link">
+                            <a href="categories" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
                                     Categories
@@ -82,19 +82,19 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="../layout/top-nav.html" class="nav-link">
+                                    <a href="admin" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Sales Admin</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="../layout/top-nav.html" class="nav-link">
+                                    <a href="sales" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Sales Create</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="../layout/top-nav.html" class="nav-link">
+                                    <a href="reports" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Sales Reports</p>
                                     </a>
