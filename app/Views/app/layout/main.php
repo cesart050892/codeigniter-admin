@@ -29,7 +29,7 @@
             <div class="float-right d-none d-sm-block">
                 <b>Version</b> 3.1.0
             </div>
-            <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+            <strong>Copyright &copy; 2014-2021 <a href="https://github.com/cesart050892">Cesar A. Tapia</a>.</strong> All rights reserved.
         </footer>
 
         <!-- Control Sidebar -->
@@ -48,7 +48,7 @@
     <script src="../../dist/js/adminlte.min.js"></script>
     <?= $this->renderSection('js') ?>
     <!-- AdminLTE for demo purposes -->
-    <script src="../../dist/js/demo.js"></script>
+    <!-- <script src="../../dist/js/demo.js"></script> -->
     <?= $this->renderSection('script') ?>
 </body>
 

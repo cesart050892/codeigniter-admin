@@ -42,3 +42,5 @@ crear el modelo y entidad del cliente
 craer controlador, metodo index y vista datatables
 
 crear cliente metodo eliminar y ajax eliminar
+
+modificar el esqueleto de la pagina principal
