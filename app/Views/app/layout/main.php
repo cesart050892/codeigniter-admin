@@ -47,6 +47,9 @@
     <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="../../dist/js/adminlte.min.js"></script>
+    <script>
+        const baseUrl = window.location.origin;
+    </script>
     <?= $this->renderSection('js') ?>
     <!-- AdminLTE for demo purposes -->
     <!-- <script src="../../dist/js/demo.js"></script> -->

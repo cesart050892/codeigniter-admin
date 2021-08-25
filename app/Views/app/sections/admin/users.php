@@ -96,23 +96,14 @@
   $(function() {
 
   });
-  //------- Functions -------------
-
-  function renderModal() {
-    $('.modal-header').css({
-      'background': '#3c8dbc',
-      'color': white
-    })
-  }
 
   //------- DataTable -------------
-  const baseUrl = window.location.origin;
-  let table = $("#table1").DataTable({
+
+  var table = $("#table1").DataTable({
     ajax: {
       type: "GET",
       url: baseUrl + '/api/v1/users',
       dataSrc: function(response) {
-        console.log(response.data)
         return response.data;
       },
     },
@@ -163,6 +154,57 @@
     },
     responsive: true,
   });
+
+  //------- Functions -------------
+
+  function renderModal() {
+    $('.modal-header').css({
+      'background': '#3c8dbc',
+      'color': white
+    })
+  }
+  var state = false;
+  $('form').submit(function(e) {
+    e.preventDefault();
+    data = $(this).serialize();
+    data += `&pass_confirm=${$('#inputPassword4').val()}`
+    $.ajax({
+      type: "POST",
+      url: baseUrl + "/api/auth/signup",
+      data: data,
+      dataType: "json",
+      success: function(response) {
+        $('#staticBackdrop').modal('hide')
+        table.ajax.reload(null, false);
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        let key = xhr.responseJSON.messages
+        if (!state) {
+          for (const val in key) {
+            if (val === 'email') {
+              state = true
+              field = $('#inputAddress2')
+              field.addClass('is-invalid')
+              html = `<div class="invalid-feedback">
+                ${key[val]}
+              </div>`
+              field.closest('div').append(html);
+            } else if (val === 'username') {
+              state = true
+              field = $('#inputEmail4')
+              field.addClass('is-invalid')
+              html = `<div class="invalid-feedback">
+                ${key[val]}
+              </div>`
+              field.closest('div').append(html);
+            } else {
+              console.log('error in database')
+            }
+          }
+        }
+      }
+    });
+  });
 </script>
 <?= $this->endSection() ?>
 
@@ -183,34 +225,30 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="iName">Name</label>
-              <input type="text" class="form-control is-invalid" id="iName" name="name">
-              <div class="invalid-feedback">
-                Please select a valid state.
-              </div>
+              <input type="text" class="form-control" id="iName" name="name" value="Jose Antonio">
             </div>
             <div class="form-group col-md-6">
               <label for="inputPassword4">Surname</label>
-              <input type="text" class="form-control" id="iSurname" name="surname">
+              <input type="text" class="form-control" id="iSurname" name="surname" value="Perez Padro">
             </div>
           </div>
           <div class="form-group">
             <label for="inputAddress2">Email</label>
-            <input type="email" class="form-control" id="inputAddress2">
+            <input type="email" class="form-control" id="inputAddress2" name="email" value="prdprz@email.com">
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="inputEmail4">Nickname</label>
-              <input type="text" class="form-control" id="inputEmail4">
+              <input type="text" class="form-control" id="inputEmail4" name="username" value="presc">
             </div>
             <div class="form-group col-md-6">
               <label for="inputPassword4">Password</label>
-              <input type="password" class="form-control" id="inputPassword4">
+              <input type="password" class="form-control" id="inputPassword4" name="password" value="admin">
             </div>
           </div>
-          <div class="custom-file">
-            <input type="file" class="custom-file-input is-invalid" id="validatedCustomFile" required="">
+          <div class="custom-file my-2">
+            <input type="file" class="custom-file-input" id="validatedCustomFile" required="">
             <label class="custom-file-label" for="validatedCustomFile">Choose Image...</label>
-            <div class="invalid-feedback">Example invalid custom file feedback</div>
           </div>
           <img src="img/default/profile.jpg" class="rounded mx-auto d-block" alt="Responsive image" style="width:200px">
       </div>

@@ -1,0 +1,80 @@
+function renderSelect(field, into) {
+  let el = $("<div>", {
+    class: "form-group",
+  })
+    .append(
+      $("<label>", {
+        prop: {
+          for: `${field}`,
+        },
+        html: `${capitalize(field)}`,
+      })
+    )
+    .append(
+      $("<select>", {
+        class: `form-control sc-${field}`,
+        id: `${field}`,
+        prop: {
+          name: `${field}`,
+        },
+      })
+    )
+    .prependTo(into);
+  return el;
+}
+
+function capitalize(param) {
+  return param.charAt(0).toUpperCase() + param.slice(1);
+}
+
+function renderForm(button, color, into = null) {
+  let el = $("<form>").append(
+    $("<button>", {
+      type: "submit",
+      class: `btn btn-${color}`,
+      text: `${capitalize(button)}`,
+    })
+  );
+  if (into != null) {
+    el.appendTo(into);
+  }
+  return el;
+}
+
+function renderTextbox(field, into) {
+  let el = $("<div>", {
+    class: "form-group",
+  })
+    .append(
+      $("<label>", {
+        prop: {
+          for: `${field}`,
+        },
+        html: `${capitalize(field)}`,
+      })
+    )
+    .append(
+      $("<input>", {
+        type: "text",
+        class: "form-control",
+        prop: {
+          name: `${field}`,
+          placeholder: `${capitalize(field)}`,
+        },
+      })
+    );
+  if (into != null) {
+    el.prependTo(into);
+  }
+  return el;
+}
+
+function makeForm(button, color, texts, selects) {
+  let form = renderForm(button, color, ".modal-body");
+  for (text of texts) {
+    renderTextbox(text, form);
+  }
+  for (select of selects) {
+    renderSelect(select, form);
+  }
+}
