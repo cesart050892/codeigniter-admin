@@ -47,7 +47,9 @@ class User extends ResourceController
             foreach ($users as $user) {
                 $user->ignorePass();
             }
-            return $this->respond($users);
+            return $this->respond(array(
+                'data'    => $users
+            ));
         } catch (\Throwable $th) {
             //throw $th;
             return $this->failServerError();

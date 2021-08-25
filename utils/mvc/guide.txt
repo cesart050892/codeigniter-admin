@@ -46,3 +46,5 @@ crear cliente metodo eliminar y ajax eliminar
 modificar el esqueleto de la pagina principal
 
 crear vistas y controladores web del sistema
+
+crear modal usuarios
