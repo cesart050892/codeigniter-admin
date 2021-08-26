@@ -72,7 +72,8 @@ class Auth extends ResourceController
 						'base_url'  => base_url(),
 						'user_img'  => $results->img,
 						'user_name' => $results->name,
-						'user_fullname' => $results->display_name,
+						'user_nick' => $results->nick,
+						'user_fullname' => $results->fullname,
 						'user_id' => $results->id,
 						'isLoggedIn' => true
 					];

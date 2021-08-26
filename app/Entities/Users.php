@@ -22,7 +22,8 @@ class Users extends Entity
     ];
 
 	protected $datamap = [
-		'fullname' => 'display'
+		'fullname' => 'display',
+		'nick'	   => 'username'
 	];
 	protected $dates   = [
 		'created_at',

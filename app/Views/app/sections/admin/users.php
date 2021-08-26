@@ -94,7 +94,37 @@
 <script>
   //------- Document Ready -------------
   $(function() {
-
+    $('.custom-file-input').change(function() {
+      image = this.files[0]
+      name = image['name']
+      type = image['type']
+      size = image['size']
+      formats = ['image/jpeg', 'image/png']
+      //return console.log(name)
+      if (type != formats[0] && type != formats[1]) {
+        $('.custom-file-input').val('')
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong with the format!'
+        })
+      }else if(size > 2000000){
+        $('.custom-file-input').val('')
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong with size!'
+        })
+      }else{
+        var img = new FileReader
+        img.readAsDataURL(image)
+        $(img).on('load', function(e){
+          var route = e.target.result
+          $('#imgThumb').attr('src', route)
+          $('.custom-file-label').text(name)
+        })
+      }
+    })
   });
 
   //------- DataTable -------------
@@ -117,14 +147,14 @@
         },
       },
       {
-        data: "username",
+        data: "nick",
         title: "Nickname"
       },
       {
         data: null,
         title: "Photo",
         render: function(data) {
-          return `<img src='${baseUrl}${data.img}' style='width:40px'>`
+          return `<img src='${baseUrl}${data.img}' style='width:40px' alt="text"'>`
         }
       },
       {
@@ -134,10 +164,10 @@
           return `
           <div class='text-center'>
           <div class='btn-group'>
-          <button class='btn btn-warning btn-sm' onClick="btnEdit(${data.id})">
+          <button class='btn btn-warning btn-sm' onClick="fnEdit(${data.id})">
           <i class="fas fa-edit"></i>
           </button>
-          <button class='btn btn-danger btn-sm' onClick="btnDelete(${data.id})">
+          <button class='btn btn-danger btn-sm' onClick="fnDelete(${data.id})">
           <i class="fas fa-trash"></i>
           </button>
           </div>
@@ -163,16 +193,38 @@
       'color': white
     })
   }
+
+  function fnDelete(id) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.get(baseUrl + '/api/v1/users/delete/' + id, () => {
+          table.ajax.reload(null, false);
+          Swal.fire(
+            'Deleted!',
+            'Your file has been deleted.',
+            'success'
+          )
+        });
+      }
+    })
+  }
   var state = false;
   $('form').submit(function(e) {
     e.preventDefault();
-    data = $(this).serialize();
-    data += `&pass_confirm=${$('#inputPassword4').val()}`
     $.ajax({
       type: "POST",
-      url: baseUrl + "/api/auth/signup",
-      data: data,
-      dataType: "json",
+      url: baseUrl + "/api/v1/users",
+      data: new FormData( this ),
+      processData: false,
+      contentType: false,
       success: function(response) {
         $('#staticBackdrop').modal('hide')
         table.ajax.reload(null, false);
@@ -247,10 +299,10 @@
             </div>
           </div>
           <div class="custom-file my-2">
-            <input type="file" class="custom-file-input" id="validatedCustomFile" required="">
+            <input accept="image/*" type="file" class="custom-file-input" id="validatedCustomFile" name="image">
             <label class="custom-file-label" for="validatedCustomFile">Choose Image...</label>
           </div>
-          <img src="img/default/profile.jpg" class="rounded mx-auto d-block" alt="Responsive image" style="width:200px">
+          <img src="img/default/profile.jpg" id="imgThumb" class="rounded mx-auto d-block" alt="Responsive image" style="width:100px">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
