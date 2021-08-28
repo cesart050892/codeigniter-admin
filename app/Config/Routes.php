@@ -56,6 +56,7 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
 		$routes->group('users', function ($routes) {
 			$routes->get('/', 'User::index');
 			$routes->get('delete/(:num)', 'User::delete/$1');
+			$routes->get('show/(:num)', 'User::edit/$1');
 			$routes->post('/', 'User::create');
 		});
 

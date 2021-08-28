@@ -50,7 +50,7 @@
     <!-- Default box -->
     <div class="card">
       <div class="card-header">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">User Add</button>
+        <button type="button" class="btn btn-primary modal-btn" data-toggle="modal" data-target="#staticBackdrop">User Add</button>
         <div class="card-tools">
           <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
             <i class="fas fa-minus"></i>
@@ -108,17 +108,17 @@
           title: 'Oops...',
           text: 'Something went wrong with the format!'
         })
-      }else if(size > 2000000){
+      } else if (size > 2000000) {
         $('.custom-file-input').val('')
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: 'Something went wrong with size!'
         })
-      }else{
+      } else {
         var img = new FileReader
         img.readAsDataURL(image)
-        $(img).on('load', function(e){
+        $(img).on('load', function(e) {
           var route = e.target.result
           $('#imgThumb').attr('src', route)
           $('.custom-file-label').text(name)
@@ -187,13 +187,6 @@
 
   //------- Functions -------------
 
-  function renderModal() {
-    $('.modal-header').css({
-      'background': '#3c8dbc',
-      'color': white
-    })
-  }
-
   function fnDelete(id) {
     Swal.fire({
       title: 'Are you sure?',
@@ -217,12 +210,12 @@
     })
   }
   var state = false;
-  $('form').submit(function(e) {
+  $('#form-main').submit(function(e) {
     e.preventDefault();
     $.ajax({
       type: "POST",
       url: baseUrl + "/api/v1/users",
-      data: new FormData( this ),
+      data: new FormData(this),
       processData: false,
       contentType: false,
       success: function(response) {
@@ -235,7 +228,7 @@
           for (const val in key) {
             if (val === 'email') {
               state = true
-              field = $('#inputAddress2')
+              field = $('#fEmail')
               field.addClass('is-invalid')
               html = `<div class="invalid-feedback">
                 ${key[val]}
@@ -243,7 +236,7 @@
               field.closest('div').append(html);
             } else if (val === 'username') {
               state = true
-              field = $('#inputEmail4')
+              field = $('#fNick')
               field.addClass('is-invalid')
               html = `<div class="invalid-feedback">
                 ${key[val]}
@@ -257,6 +250,52 @@
       }
     });
   });
+
+  function fnEdit(id) {
+    $.ajax({
+      type: "GET",
+      url: baseUrl + "/api/v1/users/show/" + id,
+      success: function(response) {
+        user = response.data
+        renderEdit(user)
+        $('#staticBackdrop').modal('show')
+      }
+    });
+  }
+
+  $('.modal-btn').on('click', function() {
+    renderCreate()
+    $('#staticBackdrop').modal('show')
+  });
+
+  function renderEdit(data) {
+    submit = $('.submit').text('Update').removeClass('btn-primary').addClass('btn-warning')
+    title = $('.modal-title').text('Edit User')
+    header = $('.modal-header').css({background:'#ffc107', color:'#000'})
+
+    name = $('#iName').val(data.name)
+    surname = $('#iSurname').val(data.surname)
+    email = $('#fEmail').val(data.email)
+    username = $('#fNick').val(data.nick)
+    pass = $('#fPass').val('').prop('placeholder', 'Password')
+    image = $('#fImage').val('')
+    thumb = $('#imgThumb').prop('src', data.img)
+  }
+
+  function renderCreate(data) {
+
+    submit = $('.submit').text('Create').removeClass('btn-warning').addClass('btn-primary')
+    title = $('.modal-title').text('Create User')
+    header = $('.modal-header').css({background:'#007bff', color:'#fff'})
+
+    name = $('#iName').val('').prop('placeholder', 'Name')
+    surname = $('#iSurname').val('').prop('placeholder', 'Surname')
+    email = $('#fEmail').val('').prop('placeholder', 'Email')
+    username = $('#fNick').val('').prop('placeholder', 'Nick')
+    pass = $('#fPass').val('').prop('placeholder', 'Password')
+    image = $('#fImage').val('')
+    thumb = $('#imgThumb').prop('src', '/img/default/profile.jpg')
+  }
 </script>
 <?= $this->endSection() ?>
 
@@ -273,40 +312,40 @@
         </button>
       </div>
       <div class="modal-body">
-        <form autocomplete="off">
+        <form id="form-main" autocomplete="off">
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="iName">Name</label>
               <input type="text" class="form-control" id="iName" name="name" value="Jose Antonio">
             </div>
             <div class="form-group col-md-6">
-              <label for="inputPassword4">Surname</label>
+              <label for="iSurname">Surname</label>
               <input type="text" class="form-control" id="iSurname" name="surname" value="Perez Padro">
             </div>
           </div>
           <div class="form-group">
             <label for="inputAddress2">Email</label>
-            <input type="email" class="form-control" id="inputAddress2" name="email" value="prdprz@email.com">
+            <input type="email" class="form-control" id="fEmail" name="email" value="prdprz@email.com">
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="inputEmail4">Nickname</label>
-              <input type="text" class="form-control" id="inputEmail4" name="username" value="presc">
+              <input type="text" class="form-control" id="fNick" name="username" value="presc">
             </div>
             <div class="form-group col-md-6">
-              <label for="inputPassword4">Password</label>
-              <input type="password" class="form-control" id="inputPassword4" name="password" value="admin">
+              <label for="fPass">Password</label>
+              <input type="password" class="form-control" id="fPass" name="password" value="admin">
             </div>
           </div>
           <div class="custom-file my-2">
-            <input accept="image/*" type="file" class="custom-file-input" id="validatedCustomFile" name="image">
+            <input accept="image/*" type="file" class="custom-file-input" id="fImage" name="image">
             <label class="custom-file-label" for="validatedCustomFile">Choose Image...</label>
           </div>
           <img src="img/default/profile.jpg" id="imgThumb" class="rounded mx-auto d-block" alt="Responsive image" style="width:100px">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Understood</button>
+        <button type="submit" class="btn btn-primary submit">Understood</button>
       </div>
       </form>
     </div>

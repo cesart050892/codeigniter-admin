@@ -23,20 +23,20 @@ class User extends ResourceController
             ];
             if ($this->validate($rules_income)) { // Execute validation
                 unset($rules_income);
-                $route = ['/img/users', $this->request->getVar("username").'-profile.jpg'];
+                $route = ['/img/users', $this->request->getVar("username") . '-profile.jpg'];
                 $data = [
                     "name"        => $this->request->getVar("name"),
                     "surname"    => $this->request->getVar("surname"),
                     "username"    => $this->request->getVar("username"),
                     "email"        => $this->request->getVar("email"),
                     "password"    => $this->request->getVar("password"),
-                    'img'         =>    $route[0]."/".$route[1],
+                    'img'         =>    $route[0] . "/" . $route[1],
                     'display'         =>    ''
                 ];
                 $user = new \App\Entities\Users($data);
                 if ($this->model->save($user)) {
                     $file = $this->request->getFile('image');
-                    $file->move(".".$route[0],$route[1]);
+                    $file->move("." . $route[0], $route[1]);
                     unset($data);
                     return $this->respond(array(
                         "status"    => 200,
@@ -109,6 +109,23 @@ class User extends ResourceController
             return $this->respond(array(
                 'message'    => 'Deleted'
             ));
+        } catch (\Throwable $th) {
+            //throw $th;
+            return $this->failServerError();
+        }
+    }
+
+    public function edit($id = null)
+    {
+        try {
+            if ($user = $this->model->find($id)) {
+                $user->ignorePass();
+                return $this->respond(array(
+                    'data'    => $user
+                ));
+            } else {
+                return $this->failNotFound('This user can\'t be no found it');
+            }
         } catch (\Throwable $th) {
             //throw $th;
             return $this->failServerError();

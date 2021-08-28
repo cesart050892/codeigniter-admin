@@ -48,3 +48,5 @@ modificar el esqueleto de la pagina principal
 crear vistas y controladores web del sistema
 
 crear modal usuarios
+
+optimizar modal de editar usuario
