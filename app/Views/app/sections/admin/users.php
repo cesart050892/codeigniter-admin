@@ -92,8 +92,14 @@
 
 <?= $this->section('script') ?>
 <script>
+
+  var state = false
   //------- Document Ready -------------
   $(function() {
+    $('#staticBackdrop').on('hidden', function() {
+      renderCreate()
+    });
+
     $('.custom-file-input').change(function() {
       image = this.files[0]
       name = image['name']
@@ -269,9 +275,12 @@
   });
 
   function renderEdit(data) {
-    submit = $('.submit').text('Update').removeClass('btn-primary').addClass('btn-warning')
+    submit = $('.submit').text('Update').removeClass('btn-primary').addClass('btn-warning to-update')
     title = $('.modal-title').text('Edit User')
-    header = $('.modal-header').css({background:'#ffc107', color:'#000'})
+    header = $('.modal-header').css({
+      background: '#ffc107',
+      color: '#000'
+    })
 
     name = $('#iName').val(data.name)
     surname = $('#iSurname').val(data.surname)
@@ -279,22 +288,32 @@
     username = $('#fNick').val(data.nick)
     pass = $('#fPass').val('').prop('placeholder', 'Password')
     image = $('#fImage').val('')
+    label = $('.custom-file-label').text('Choose Image...')
     thumb = $('#imgThumb').prop('src', data.img)
+    state = true
   }
 
   function renderCreate(data) {
 
     submit = $('.submit').text('Create').removeClass('btn-warning').addClass('btn-primary')
     title = $('.modal-title').text('Create User')
-    header = $('.modal-header').css({background:'#007bff', color:'#fff'})
-
+    header = $('.modal-header').css({
+      background: '#007bff',
+      color: '#fff'
+    })
+    state = false
     name = $('#iName').val('').prop('placeholder', 'Name')
     surname = $('#iSurname').val('').prop('placeholder', 'Surname')
     email = $('#fEmail').val('').prop('placeholder', 'Email')
     username = $('#fNick').val('').prop('placeholder', 'Nick')
     pass = $('#fPass').val('').prop('placeholder', 'Password')
     image = $('#fImage').val('')
+    label = $('.custom-file-label').text('Choose Image...')
     thumb = $('#imgThumb').prop('src', '/img/default/profile.jpg')
+  }
+
+  function update(){
+
   }
 </script>
 <?= $this->endSection() ?>
@@ -316,25 +335,25 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="iName">Name</label>
-              <input type="text" class="form-control" id="iName" name="name" value="Jose Antonio">
+              <input type="text" class="form-control" id="iName" name="name">
             </div>
             <div class="form-group col-md-6">
               <label for="iSurname">Surname</label>
-              <input type="text" class="form-control" id="iSurname" name="surname" value="Perez Padro">
+              <input type="text" class="form-control" id="iSurname" name="surname">
             </div>
           </div>
           <div class="form-group">
             <label for="inputAddress2">Email</label>
-            <input type="email" class="form-control" id="fEmail" name="email" value="prdprz@email.com">
+            <input type="email" class="form-control" id="fEmail" name="email">
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="inputEmail4">Nickname</label>
-              <input type="text" class="form-control" id="fNick" name="username" value="presc">
+              <input type="text" class="form-control" id="fNick" name="username" >
             </div>
             <div class="form-group col-md-6">
               <label for="fPass">Password</label>
-              <input type="password" class="form-control" id="fPass" name="password" value="admin">
+              <input type="password" class="form-control" id="fPass" name="password" >
             </div>
           </div>
           <div class="custom-file my-2">
