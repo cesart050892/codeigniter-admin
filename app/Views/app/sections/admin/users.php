@@ -281,7 +281,7 @@
       background: '#ffc107',
       color: '#000'
     })
-
+    $('.invalid-feedback').remove()
     name = $('#iName').val(data.name)
     surname = $('#iSurname').val(data.surname)
     email = $('#fEmail').val(data.email)
@@ -294,13 +294,15 @@
   }
 
   function renderCreate(data) {
-
+    
     submit = $('.submit').text('Create').removeClass('btn-warning').addClass('btn-primary')
     title = $('.modal-title').text('Create User')
     header = $('.modal-header').css({
       background: '#007bff',
       color: '#fff'
     })
+    $("form input").removeClass("is-invalid");
+    $('.invalid-feedback').remove()
     state = false
     name = $('#iName').val('').prop('placeholder', 'Name')
     surname = $('#iSurname').val('').prop('placeholder', 'Surname')

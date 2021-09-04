@@ -16,27 +16,29 @@ class User extends ResourceController
         try {
             $rules_income = [ // Rules validations
                 'name' => 'required',
-                'surname' => 'required',
+                //'surname' => 'required',
                 'email' => 'required|valid_email|is_unique[users.email]',
                 'username' => 'required|is_unique[users.username]',
                 'password' => 'required',
             ];
             if ($this->validate($rules_income)) { // Execute validation
                 unset($rules_income);
-                $route = ['/img/users', $this->request->getVar("username") . '-profile.jpg'];
                 $data = [
                     "name"        => $this->request->getVar("name"),
                     "surname"    => $this->request->getVar("surname"),
                     "username"    => $this->request->getVar("username"),
                     "email"        => $this->request->getVar("email"),
                     "password"    => $this->request->getVar("password"),
-                    'img'         =>    $route[0] . "/" . $route[1],
                     'display'         =>    ''
                 ];
-                $user = new \App\Entities\Users($data);
-                if ($this->model->save($user)) {
+                if ($this->validate(['image' => 'uploaded[image]|max_size[image,1024]'])) {
+                    $route = ['/img/users', $this->request->getVar("username") . '-profile.jpg'];
                     $file = $this->request->getFile('image');
                     $file->move("." . $route[0], $route[1]);
+                    $data += ['img'         =>    $route[0] . "/" . $route[1]];
+                }
+                $user = new \App\Entities\Users($data);
+                if ($this->model->save($user)) {
                     unset($data);
                     return $this->respond(array(
                         "status"    => 200,
@@ -105,10 +107,23 @@ class User extends ResourceController
     public function delete($id = null)
     {
         try {
-            $this->model->delete($id);
-            return $this->respond(array(
-                'message'    => 'Deleted'
-            ));
+            $user = $this->model->find($id);
+            $base_dir = realpath($_SERVER["DOCUMENT_ROOT"]);
+            if ($user->img != '/img/default/profile.jpg') {
+                $file_delete =  "$base_dir/$user->img";
+                if (file_exists($file_delete)) {
+                    if (unlink($file_delete)) {
+                        $image = true;
+                    }
+                }
+            }
+            if ($this->model->delete($id)) {
+                return $this->respond(array(
+                    'message'    => 'Deleted'
+                ));
+            } else {
+                return $this->fail($this->model->errors());
+            }
         } catch (\Throwable $th) {
             //throw $th;
             return $this->failServerError();
