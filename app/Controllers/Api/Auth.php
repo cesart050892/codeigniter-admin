@@ -83,7 +83,7 @@ class Auth extends ResourceController
 						'message' => 'logged in',
 						'data' => [
 							'username' => $results->username,
-							'name' =>  $results->display_name,
+							'name' =>  $results->fullname,
 							'created_at' => $results->created_at->humanize(),
 						]
 					], 200);

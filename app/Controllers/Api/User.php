@@ -146,4 +146,51 @@ class User extends ResourceController
             return $this->failServerError();
         }
     }
+
+    public function update($id = null)
+    {
+        try {
+            $rules_income = [ // Rules validations
+                'name' => 'required',
+                'email' => 'required|valid_email|is_unique[users.email,id,{id}]',
+                'username' => 'required|is_unique[users.username,id,{id}]',
+            ];
+            if ($this->validate($rules_income)) { // Execute validation
+                unset($rules_income);
+                $data = [
+                    "name"        => $this->request->getVar("name"),
+                    "surname"    => $this->request->getVar("surname"),
+                    "username"    => $this->request->getVar("username"),
+                    "email"        => $this->request->getVar("email"),
+                    "password"    => $this->request->getVar("password"),
+                    'display'         =>    ''
+                ];
+                if ($this->validate(['image' => 'uploaded[image]|max_size[image,1024]'])) {
+                    $route = ['/img/users', $this->request->getVar("username") . '-profile.jpg'];
+                    $file = $this->request->getFile('image');
+                    $file->move("." . $route[0], $route[1]);
+                    $data += ['img'         =>    $route[0] . "/" . $route[1]];
+                }
+                $user = new \App\Entities\Users($data);
+                $user->id = $this->request->getVar("id");
+                if ($this->model->save($user)) {
+                    unset($data);
+                    return $this->respond(array(
+                        "status"    => 200,
+                        "message"     => "Welcome! " . $user->username,
+                        "data"        => [
+                            "username"     => $user->username,
+                            "email"        => $user->email
+                        ]
+                    ));
+                } else {
+                    return $this->fail($this->model->validator->getErrors());
+                }
+            } else {
+                return $this->fail($this->validator->getErrors());
+            }
+        } catch (\Throwable $e) {
+            return $this->failServerError($e->getMessage());
+        }
+    }
 }

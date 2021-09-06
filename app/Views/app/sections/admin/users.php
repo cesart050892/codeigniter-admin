@@ -92,7 +92,6 @@
 
 <?= $this->section('script') ?>
 <script>
-
   var state = false
   //------- Document Ready -------------
   $(function() {
@@ -215,13 +214,88 @@
       }
     })
   }
-  var state = false;
+  var state = {
+    val: false
+  };
   $('#form-main').submit(function(e) {
     e.preventDefault();
+    if (state.val != true) {
+      saved(this)
+    } else {
+      updated(this)
+    }
+  });
+
+  function fnEdit(id) {
+    $.ajax({
+      type: "GET",
+      url: baseUrl + "/api/v1/users/show/" + id,
+      success: function(response) {
+        user = response.data
+        state = {
+          val: true,
+          user: user.id
+        }
+        renderEdit(user)
+        $('#staticBackdrop').modal('show')
+      }
+    });
+  }
+
+  $('.modal-btn').on('click', function() {
+    renderCreate()
+    $('#staticBackdrop').modal('show')
+  });
+
+  function renderEdit(data) {
+    submit = $('.submit').text('Update').removeClass('btn-primary').addClass('btn-warning to-update')
+    title = $('.modal-title').text('Edit User')
+    header = $('.modal-header').css({
+      background: '#ffc107',
+      color: '#000'
+    })
+    $('.invalid-feedback').remove()
+    name = $('#iName').val(data.name)
+    surname = $('#iSurname').val(data.surname)
+    email = $('#fEmail').val(data.email)
+    username = $('#fNick').val(data.nick)
+    pass = $('#fPass').val('').prop('placeholder', 'Password')
+    image = $('#fImage').val('')
+    label = $('.custom-file-label').text('Choose Image...')
+    thumb = $('#imgThumb').prop('src', data.img)
+  }
+
+  function renderCreate(data) {
+
+    submit = $('.submit').text('Create').removeClass('btn-warning').addClass('btn-primary')
+    title = $('.modal-title').text('Create User')
+    header = $('.modal-header').css({
+      background: '#007bff',
+      color: '#fff'
+    })
+    $("form input").removeClass("is-invalid");
+    $('.invalid-feedback').remove()
+    state = false
+    name = $('#iName').val('').prop('placeholder', 'Name')
+    surname = $('#iSurname').val('').prop('placeholder', 'Surname')
+    email = $('#fEmail').val('').prop('placeholder', 'Email')
+    username = $('#fNick').val('').prop('placeholder', 'Nick')
+    pass = $('#fPass').val('').prop('placeholder', 'Password')
+    image = $('#fImage').val('')
+    label = $('.custom-file-label').text('Choose Image...')
+    thumb = $('#imgThumb').prop('src', '/img/default/profile.jpg')
+    state = {
+      val: false
+    }
+  }
+
+  function updated(form) {
+    user = new FormData(form)
+    user.append('id', state.user)
     $.ajax({
       type: "POST",
-      url: baseUrl + "/api/v1/users",
-      data: new FormData(this),
+      url: baseUrl + "/api/v1/users/edit/" + state.user,
+      data: user ,
       processData: false,
       contentType: false,
       success: function(response) {
@@ -255,67 +329,46 @@
         }
       }
     });
-  });
+  }
 
-  function fnEdit(id) {
+  function saved(form) {
     $.ajax({
-      type: "GET",
-      url: baseUrl + "/api/v1/users/show/" + id,
+      type: "POST",
+      url: baseUrl + "/api/v1/users",
+      data: new FormData(form),
+      processData: false,
+      contentType: false,
       success: function(response) {
-        user = response.data
-        renderEdit(user)
-        $('#staticBackdrop').modal('show')
+        $('#staticBackdrop').modal('hide')
+        table.ajax.reload(null, false);
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        let key = xhr.responseJSON.messages
+        if (!state) {
+          for (const val in key) {
+            if (val === 'email') {
+              state = true
+              field = $('#fEmail')
+              field.addClass('is-invalid')
+              html = `<div class="invalid-feedback">
+                ${key[val]}
+              </div>`
+              field.closest('div').append(html);
+            } else if (val === 'username') {
+              state = true
+              field = $('#fNick')
+              field.addClass('is-invalid')
+              html = `<div class="invalid-feedback">
+                ${key[val]}
+              </div>`
+              field.closest('div').append(html);
+            } else {
+              console.log('error in database')
+            }
+          }
+        }
       }
     });
-  }
-
-  $('.modal-btn').on('click', function() {
-    renderCreate()
-    $('#staticBackdrop').modal('show')
-  });
-
-  function renderEdit(data) {
-    submit = $('.submit').text('Update').removeClass('btn-primary').addClass('btn-warning to-update')
-    title = $('.modal-title').text('Edit User')
-    header = $('.modal-header').css({
-      background: '#ffc107',
-      color: '#000'
-    })
-    $('.invalid-feedback').remove()
-    name = $('#iName').val(data.name)
-    surname = $('#iSurname').val(data.surname)
-    email = $('#fEmail').val(data.email)
-    username = $('#fNick').val(data.nick)
-    pass = $('#fPass').val('').prop('placeholder', 'Password')
-    image = $('#fImage').val('')
-    label = $('.custom-file-label').text('Choose Image...')
-    thumb = $('#imgThumb').prop('src', data.img)
-    state = true
-  }
-
-  function renderCreate(data) {
-    
-    submit = $('.submit').text('Create').removeClass('btn-warning').addClass('btn-primary')
-    title = $('.modal-title').text('Create User')
-    header = $('.modal-header').css({
-      background: '#007bff',
-      color: '#fff'
-    })
-    $("form input").removeClass("is-invalid");
-    $('.invalid-feedback').remove()
-    state = false
-    name = $('#iName').val('').prop('placeholder', 'Name')
-    surname = $('#iSurname').val('').prop('placeholder', 'Surname')
-    email = $('#fEmail').val('').prop('placeholder', 'Email')
-    username = $('#fNick').val('').prop('placeholder', 'Nick')
-    pass = $('#fPass').val('').prop('placeholder', 'Password')
-    image = $('#fImage').val('')
-    label = $('.custom-file-label').text('Choose Image...')
-    thumb = $('#imgThumb').prop('src', '/img/default/profile.jpg')
-  }
-
-  function update(){
-
   }
 </script>
 <?= $this->endSection() ?>
@@ -351,11 +404,11 @@
           <div class="form-row">
             <div class="form-group col-md-6">
               <label for="inputEmail4">Nickname</label>
-              <input type="text" class="form-control" id="fNick" name="username" >
+              <input type="text" class="form-control" id="fNick" name="username">
             </div>
             <div class="form-group col-md-6">
               <label for="fPass">Password</label>
-              <input type="password" class="form-control" id="fPass" name="password" >
+              <input type="password" class="form-control" id="fPass" name="password">
             </div>
           </div>
           <div class="custom-file my-2">

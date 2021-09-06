@@ -58,6 +58,7 @@ $routes->group('api', ['namespace' => 'App\Controllers\Api'], function ($routes)
 			$routes->get('delete/(:num)', 'User::delete/$1');
 			$routes->get('show/(:num)', 'User::edit/$1');
 			$routes->post('/', 'User::create');
+			$routes->post('edit/(:num)', 'User::update/$1');
 		});
 
 		$routes->group('clients', function ($routes) {
