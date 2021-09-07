@@ -165,7 +165,17 @@ class User extends ResourceController
                     "password"    => $this->request->getVar("password"),
                     'display'         =>    ''
                 ];
+                $user = $this->model->find($id);
                 if ($this->validate(['image' => 'uploaded[image]|max_size[image,1024]'])) {
+                    $base_dir = realpath($_SERVER["DOCUMENT_ROOT"]);
+                    if ($user->img != '/img/default/profile.jpg') {
+                        $file_delete =  "$base_dir/$user->img";
+                        if (file_exists($file_delete)) {
+                            if (unlink($file_delete)) {
+                                $image = true;
+                            }
+                        }
+                    }
                     $route = ['/img/users', $this->request->getVar("username") . '-profile.jpg'];
                     $file = $this->request->getFile('image');
                     $file->move("." . $route[0], $route[1]);
