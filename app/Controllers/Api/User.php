@@ -26,9 +26,6 @@ class User extends ResourceController
                 $data = [
                     "name"        => $this->request->getVar("name"),
                     "surname"    => $this->request->getVar("surname"),
-                    "username"    => $this->request->getVar("username"),
-                    "email"        => $this->request->getVar("email"),
-                    "password"    => $this->request->getVar("password"),
                     'display'         =>    ''
                 ];
                 if ($this->validate(['image' => 'uploaded[image]|max_size[image,1024]'])) {
@@ -39,15 +36,25 @@ class User extends ResourceController
                 }
                 $user = new \App\Entities\Users($data);
                 if ($this->model->save($user)) {
-                    unset($data);
-                    return $this->respond(array(
-                        "status"    => 200,
-                        "message"     => "Welcome! " . $user->username,
-                        "data"        => [
-                            "username"     => $user->username,
-                            "email"        => $user->email
-                        ]
-                    ));
+                    $data = [
+                        "username"    => $this->request->getVar("username"),
+                        "email"        => $this->request->getVar("email"),
+                        "password"    => $this->request->getVar("password"),
+                        "user_fk"     => $this->model->insertID()
+                    ];
+                    $authModel = model('App\Models\Auth', false);
+                    if ($authModel->save($data)) {
+                        return $this->respond(array(
+                            "status"    => 200,
+                            "message"     => "Welcome! " . $user->username,
+                            "data"        => [
+                                "username"     => $user->username,
+                                "email"        => $user->email
+                            ]
+                        ));
+                    } else {
+                        return $this->fail($authModel->validator->getErrors());
+                    }
                 } else {
                     return $this->fail($this->model->validator->getErrors());
                 }
