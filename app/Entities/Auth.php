@@ -10,6 +10,7 @@ class Auth extends Entity
         'password' => null,
 		'username' => null,
 		'email' => null,
+		'user_fk' => null,
         'created_at' => null,
         'updated_at' => null,
 		'deleted_at' => null,
