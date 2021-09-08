@@ -16,9 +16,9 @@ class Auth extends ResourceController
 		try {
 			$rules_income = [ // Rules validations
 				'name' => 'required',
-				'surname' => 'required',
-				'email' => 'required|valid_email|is_unique[users.email]',
-				'username' => 'required|is_unique[users.username]',
+				//'surname' => 'required',
+				'email' => 'required|valid_email|is_unique[auth.email]',
+				'username' => 'required|is_unique[auth.username]',
 				'password' => 'required',
 				'pass_confirm' => 'required|matches[password]',
 			];
@@ -27,22 +27,30 @@ class Auth extends ResourceController
 				$data = [
 					"name"		=> $this->request->getVar("name"),
 					"surname"	=> $this->request->getVar("surname"),
-					"username"	=> $this->request->getVar("username"),
-					"email"		=> $this->request->getVar("email"),
-					"password"	=> $this->request->getVar("password"),
 					'display' 		=>	''
 				];
 				$user = new \App\Entities\Users($data);
-				unset($data);
 				if ($this->model->save($user)) {
-					return $this->respond(array(
-						"status"	=> 200,
-						"message" 	=> "Welcome! " . $user->username,
-						"data"		=> [
-							"username" 	=> $user->username,
-							"email"		=> $user->email
-						]
-					));
+					$data = [
+						"username"	=> $this->request->getVar("username"),
+						"email"		=> $this->request->getVar("email"),
+						"password"	=> $this->request->getVar("password"),
+						"user_fk"   => $this->model->insertID()
+					];
+					$authModel = model('App\Models\Auth', false);
+					$user = new \App\Entities\Auth($data);
+					if($authModel->save($user)){
+						return $this->respond(array(
+							"status"	=> 200,
+							"message" 	=> "Welcome! " . $user->username,
+							"data"		=> [
+								"username" 	=> $user->username,
+								"email"		=> $user->email
+							]
+						));
+					}else{
+						return $this->fail($authModel->validator->getErrors());
+					}
 				} else {
 					return $this->fail($this->model->validator->getErrors());
 				}
@@ -65,7 +73,8 @@ class Auth extends ResourceController
 			];
 			if ($this->validate($rules_income)) { // Execute validation
 				$data = [$this->request->getVar('username'), $this->request->getVar('password')];
-				$results = $this->model->where('username', $data[0])->first(); // Verify exist username
+				$authModel = model('App\Models\Auth', false);
+				$results = $authModel->where('username', $data[0])->first(); // Verify exist username
 				if ($results == null) return $this->fail('This user no exist!');
 				if (password_verify($data[1], $results->password)) { // Verify password
 					$session_data = [ // Session data

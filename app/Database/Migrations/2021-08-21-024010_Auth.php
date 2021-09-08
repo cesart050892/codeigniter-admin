@@ -4,9 +4,9 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Users extends Migration
+class Auth extends Migration
 {
-	protected $name = 'users';
+	protected $name = 'auth';
 
 	public function up()
 	{

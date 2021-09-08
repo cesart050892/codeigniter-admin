@@ -17,8 +17,8 @@ class User extends ResourceController
             $rules_income = [ // Rules validations
                 'name' => 'required',
                 //'surname' => 'required',
-                'email' => 'required|valid_email|is_unique[users.email]',
-                'username' => 'required|is_unique[users.username]',
+                'email' => 'required|valid_email|is_unique[auth.email]',
+                'username' => 'required|is_unique[auth.username]',
                 'password' => 'required',
             ];
             if ($this->validate($rules_income)) { // Execute validation
