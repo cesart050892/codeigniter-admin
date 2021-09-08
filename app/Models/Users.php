@@ -39,4 +39,31 @@ class Users extends Model
 	protected $afterFind            = [];
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
+
+	// Functions
+
+	public function getAll(){
+		$data = $this->builder()
+		->select('
+		users.id, 
+		users.`name`, 
+		users.surname, 
+		users.display, 
+		users.img, 
+		users.phone, 
+		users.address, 
+		auth.email, 
+		auth.username,
+		auth.id AS auth
+		')
+		->join('auth', 'users.id = auth.user_fk' )
+		->where('users.deleted_at', null)
+		->get()
+		->getResultArray();
+		$entity = [];
+		foreach ($data as $key) {
+			array_push($entity, new \App\Entities\Users($key));
+		}
+		return $entity;
+	}
 }

@@ -91,10 +91,7 @@ class User extends ResourceController
     public function index()
     {
         try {
-            $users = $this->model->findAll();
-            foreach ($users as $user) {
-                $user->ignorePass();
-            }
+            $users = $this->model->getAll();
             return $this->respond(array(
                 'data'    => $users
             ));
