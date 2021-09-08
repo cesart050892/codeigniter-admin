@@ -54,7 +54,9 @@ class Users extends Model
 		users.address, 
 		auth.email, 
 		auth.username,
-		auth.id AS auth
+		auth.id AS auth,
+		users.created_at,
+		users.updated_at,
 		')
 		->join('auth', 'users.id = auth.user_fk' )
 		->where('users.deleted_at', null)
@@ -64,6 +66,31 @@ class Users extends Model
 		foreach ($data as $key) {
 			array_push($entity, new \App\Entities\Users($key));
 		}
+		return $entity;
+	}
+
+	public function getOne($id){
+		$data = $this->builder()
+		->select('
+		users.id, 
+		users.`name`, 
+		users.surname, 
+		users.display, 
+		users.img, 
+		users.phone, 
+		users.address, 
+		auth.email, 
+		auth.username,
+		auth.id AS auth,
+		users.created_at,
+		users.updated_at,
+		')
+		->join('auth', 'users.id = auth.user_fk' )
+		->where('users.id', $id)
+		->where('users.deleted_at', null)
+		->get()
+		->getRowArray();
+		$entity = new \App\Entities\Users($data);
 		return $entity;
 	}
 }

@@ -130,8 +130,7 @@ class User extends ResourceController
     public function edit($id = null)
     {
         try {
-            if ($user = $this->model->find($id)) {
-                $user->ignorePass();
+            if ($user = $this->model->getOne($id)) {
                 return $this->respond(array(
                     'data'    => $user
                 ));
