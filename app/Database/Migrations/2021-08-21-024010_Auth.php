@@ -17,32 +17,18 @@ class Users extends Migration
 				'unsigned'       => true,
 				'auto_increment' => true,
 			],
-			'name'	=> [
+			'email'	=> [
+				'type'       => 'VARCHAR',
+				'constraint' => '150',
+			],
+			'username'	=> [
 				'type'       => 'VARCHAR',
 				'constraint' => '75',
 			],
-			'surname'	=> [
+			'password'	=> [
 				'type'       => 'VARCHAR',
-				'constraint' => '75',
-			],
-			'display'	=> [
-				'type'       => 'VARCHAR',
-				'constraint' => '75',
-			],
-			'img'	=> [
-				'type'       => 'VARCHAR',
-				'constraint' => '75',
-				'default'    => '/img/default/profile.jpg'
-			],
-			'phone'	=> [
-				'type'       => 'VARCHAR',
-				'constraint' => '10'
-			],
-			'address'	=> [
-				'type'       => 'VARCHAR',
-				'constraint' => '75'
+				'constraint' => '255',
 			]
-
 		]);
 		$this->forge->addKey('id', true);
 		$this->forge->addField("created_at DATETIME NULL DEFAULT NULL");

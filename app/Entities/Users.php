@@ -10,10 +10,8 @@ class Users extends Entity
         'id' => null,
         'name' => null,        
         'surname' => null,
-        'password' => null,
-		'username' => null,
-		'email' => null,
 		'phone' => null,
+		'address' => null,
 		'display' => null,
 		'img' => null,
         'created_at' => null,
@@ -39,17 +37,6 @@ class Users extends Entity
 		}else{
 			$this->attributes['display'] = $this->attributes['name'];
 		}
-		return $this;
-	}
-
-	protected function setPassword(string $password)
-	{
-		$this->attributes['password'] = password_hash($password, PASSWORD_BCRYPT);
-		return $this;
-	}
-
-	public function ignorePass(){
-		unset($this->attributes['password']);
 		return $this;
 	}
 }
