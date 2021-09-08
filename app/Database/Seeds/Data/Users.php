@@ -14,23 +14,14 @@ class Users extends Seeder
 			[
 				'name'		=>	'Cesar Augusto',
 				'surname'   => 	'Tapia',
-				'username'	=>	'cesart050892',
-				'password'	=>	'admin',
-				'email'		=>	'cesart050892@gmail.com',
 				'display' 		=>	''
 			],
 			[
 				'name'		=>	'Administrator',
-				'username'	=>	'admin',
-				'password'	=>	'admin',
-				'email'		=>	'admin@crm.dev',
 				'display' 		=>	''
 			],
 			[
 				'name'		=>	'Guest',
-				'username'	=>	'guest',
-				'password'	=>	'guest',
-				'email'		=>	'guest@crm.dev',
 				'display' 		=>	''
 			]
 		];

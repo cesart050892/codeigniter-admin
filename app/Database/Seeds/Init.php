@@ -13,6 +13,7 @@ class Init extends Seeder
 		// And this command php spark db:seed \API\Database\Seeds\Init
 		$this->call('App\Database\Seeds\Data\Clients');
 		$this->call('App\Database\Seeds\Data\Users');
+		$this->call('App\Database\Seeds\Data\Auth');
 		
 
 	}
