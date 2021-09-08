@@ -1,5 +1,9 @@
 
 # AdminLTE + Codeigniter 4
+##### En el proyecto se hicieron uso de:
+Filtros, Plantilla, Migraciones, Seeders, set404Override, Entidades.
+
+Se esta desarollando la parte de actualización de usuario.
 
 ## Implentación
 - Copiar en el archivo env y renombrarlo como .env
