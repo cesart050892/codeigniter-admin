@@ -12,7 +12,7 @@ class Users extends Model
 	protected $useAutoIncrement     = true;
 	protected $insertID             = 0;
 	protected $returnType           = \App\Entities\Users::class;
-	protected $useSoftDeletes       = false;
+	protected $useSoftDeletes       = true;
 	protected $protectFields        = true;
 	protected $allowedFields        = ['name', 'surname', 'display', 'email', 'img', 'username' ,'password'];
 
@@ -59,7 +59,6 @@ class Users extends Model
 				users.updated_at,
 			')
 			->join('auth', 'users.id = auth.user_fk' )
-			->where('users.deleted_at', null)
 			->findAll();
 			
 	}
