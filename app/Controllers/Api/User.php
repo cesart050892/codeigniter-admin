@@ -155,17 +155,14 @@ class User extends ResourceController
         try {
             $rules_income = [ // Rules validations
                 'name' => 'required',
-                'email' => 'required|valid_email|is_unique[users.email,id,{id}]',
-                'username' => 'required|is_unique[users.username,id,{id}]',
+                'email' => 'required|valid_email|is_unique[auth.email,id,{id}]',
+                'username' => 'required|is_unique[auth.username,id,{id}]',
             ];
             if ($this->validate($rules_income)) { // Execute validation
                 unset($rules_income);
                 $data = [
                     "name"        => $this->request->getVar("name"),
                     "surname"    => $this->request->getVar("surname"),
-                    "username"    => $this->request->getVar("username"),
-                    "email"        => $this->request->getVar("email"),
-                    "password"    => $this->request->getVar("password"),
                     'display'         =>    ''
                 ];
                 $user = $this->model->find($id);
