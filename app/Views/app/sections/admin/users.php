@@ -257,9 +257,9 @@
     $('.invalid-feedback').remove()
     name = $('#iName').val(data.name)
     surname = $('#iSurname').val(data.surname)
-    email = $('#fEmail').val(data.email)
-    username = $('#fNick').val(data.nick)
-    pass = $('#fPass').val('').prop('placeholder', 'Password')
+    email = $('#fEmail').closest('div').remove()
+    username = $('#fNick').closest('div').remove()
+    pass = $('#fPass').closest('div').remove()
     image = $('#fImage').val('')
     label = $('.custom-file-label').text('Choose Image...')
     thumb = $('#imgThumb').prop('src', data.img)
@@ -278,6 +278,21 @@
     state = false
     name = $('#iName').val('').prop('placeholder', 'Name')
     surname = $('#iSurname').val('').prop('placeholder', 'Surname')
+    html = `<div class="form-group">
+            <label for="inputAddress2">Email</label>
+            <input type="email" class="form-control" id="fEmail" name="email">
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="inputEmail4">Nickname</label>
+              <input type="text" class="form-control" id="fNick" name="username">
+            </div>
+            <div class="form-group col-md-6">
+              <label for="fPass">Password</label>
+              <input type="password" class="form-control" id="fPass" name="password">
+            </div>
+          </div>`
+    $('#iSurname').closest('.fullname').after(html)
     email = $('#fEmail').val('').prop('placeholder', 'Email')
     username = $('#fNick').val('').prop('placeholder', 'Nick')
     pass = $('#fPass').val('').prop('placeholder', 'Password')
@@ -387,7 +402,7 @@
       </div>
       <div class="modal-body">
         <form id="form-main" autocomplete="off">
-          <div class="form-row">
+          <div class="form-row fullname">
             <div class="form-group col-md-6">
               <label for="iName">Name</label>
               <input type="text" class="form-control" id="iName" name="name">
@@ -395,20 +410,6 @@
             <div class="form-group col-md-6">
               <label for="iSurname">Surname</label>
               <input type="text" class="form-control" id="iSurname" name="surname">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="inputAddress2">Email</label>
-            <input type="email" class="form-control" id="fEmail" name="email">
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="inputEmail4">Nickname</label>
-              <input type="text" class="form-control" id="fNick" name="username">
-            </div>
-            <div class="form-group col-md-6">
-              <label for="fPass">Password</label>
-              <input type="password" class="form-control" id="fPass" name="password">
             </div>
           </div>
           <div class="custom-file my-2">
