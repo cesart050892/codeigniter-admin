@@ -11,7 +11,7 @@ class Users extends Model
 	protected $primaryKey           = 'id';
 	protected $useAutoIncrement     = true;
 	protected $insertID             = 0;
-	protected $returnType           = 'App\Entities\Users';
+	protected $returnType           = \App\Entities\Users::class;
 	protected $useSoftDeletes       = false;
 	protected $protectFields        = true;
 	protected $allowedFields        = ['name', 'surname', 'display', 'email', 'img', 'username' ,'password'];
@@ -43,30 +43,25 @@ class Users extends Model
 	// Functions
 
 	public function getAll(){
-		$data = $this->builder()
-		->select('
-		users.id, 
-		users.`name`, 
-		users.surname, 
-		users.display, 
-		users.img, 
-		users.phone, 
-		users.address, 
-		auth.email, 
-		auth.username,
-		auth.id AS auth,
-		users.created_at,
-		users.updated_at,
-		')
-		->join('auth', 'users.id = auth.user_fk' )
-		->where('users.deleted_at', null)
-		->get()
-		->getResultArray();
-		$entity = [];
-		foreach ($data as $key) {
-			array_push($entity, new \App\Entities\Users($key));
-		}
-		return $entity;
+
+		return $this->select('
+				users.id, 
+				users.`name`, 
+				users.surname, 
+				users.display, 
+				users.img, 
+				users.phone, 
+				users.address, 
+				auth.email, 
+				auth.username,
+				auth.id AS auth,
+				users.created_at,
+				users.updated_at,
+			')
+			->join('auth', 'users.id = auth.user_fk' )
+			->where('users.deleted_at', null)
+			->findAll();
+			
 	}
 
 	public function getOne($id){
