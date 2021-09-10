@@ -9,6 +9,7 @@ class User extends ResourceController
     public function __construct()
     {
         $this->model = model('App\Models\Users', false);
+        $this->db = \Config\Database::connect();
     }
 
     public function create()
@@ -35,6 +36,7 @@ class User extends ResourceController
                     $data += ['img'         =>    $route[0] . "/" . $route[1]];
                 }
                 $user = new \App\Entities\Users($data);
+                $this->db->transStart();
                 if ($this->model->save($user)) {
                     $data = [
                         "username"    => $this->request->getVar("username"),
@@ -44,6 +46,7 @@ class User extends ResourceController
                     ];
                     $authModel = model('App\Models\Auth', false);
                     if ($authModel->save($data)) {
+                        $this->db->transComplete();
                         return $this->respond(array(
                             "status"    => 200,
                             "message"     => "Welcome! " . $user->username,
@@ -122,6 +125,7 @@ class User extends ResourceController
                 }
             }
             if ($this->model->delete($id)) {
+                $this->model->purgeDeleted();
                 return $this->respond(array(
                     'message'    => 'Deleted'
                 ));
@@ -154,35 +158,34 @@ class User extends ResourceController
     {
         try {
             $rules_income = [ // Rules validations
-                'name' => 'required',
-                'email' => 'required|valid_email|is_unique[users.email,id,{id}]',
-                'username' => 'required|is_unique[users.username,id,{id}]',
+                'name' => 'required'
             ];
             if ($this->validate($rules_income)) { // Execute validation
                 unset($rules_income);
                 $data = [
                     "name"        => $this->request->getVar("name"),
                     "surname"    => $this->request->getVar("surname"),
-                    "username"    => $this->request->getVar("username"),
-                    "email"        => $this->request->getVar("email"),
-                    "password"    => $this->request->getVar("password"),
                     'display'         =>    ''
                 ];
-                $user = $this->model->find($id);
-                if ($this->validate(['image' => 'uploaded[image]|max_size[image,1024]'])) {
+                $userData = $this->model->getOne($id);
+                if ($this->validate(['image' => 'uploaded[image]|max_size[image,2048]'])) {
                     $base_dir = realpath($_SERVER["DOCUMENT_ROOT"]);
-                    if ($user->img != '/img/default/profile.jpg') {
-                        $file_delete =  "$base_dir/$user->img";
+                    if ($userData->img != '/img/default/profile.jpg') {
+                        $file_delete =  "$base_dir/$userData->img";
                         if (file_exists($file_delete)) {
                             if (unlink($file_delete)) {
                                 $image = true;
                             }
                         }
                     }
-                    $route = ['/img/users', $this->request->getVar("username") . '-profile.jpg'];
                     $file = $this->request->getFile('image');
-                    $file->move("." . $route[0], $route[1]);
-                    $data += ['img'         =>    $route[0] . "/" . $route[1]];
+                    if ($file->isValid() && !$file->hasMoved()) {
+                        $route = ['/img/users', $userData->nick . "." . $file->getExtension()];
+                        $file->move("." . $route[0], $route[1]);
+                        $data += ['img'         =>    $route[0] . "/" . $route[1]];
+                    }
+                } else {
+                    return $this->failValidationErrors('Image is no valid!');
                 }
                 $user = new \App\Entities\Users($data);
                 $user->id = $this->request->getVar("id");
@@ -190,10 +193,9 @@ class User extends ResourceController
                     unset($data);
                     return $this->respond(array(
                         "status"    => 200,
-                        "message"     => "Welcome! " . $user->username,
+                        "message"     => "Welcome! " . $userData->username,
                         "data"        => [
-                            "username"     => $user->username,
-                            "email"        => $user->email
+                            "username"     => $userData->username
                         ]
                     ));
                 } else {

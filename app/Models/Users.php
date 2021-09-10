@@ -64,8 +64,7 @@ class Users extends Model
 	}
 
 	public function getOne($id){
-		$data = $this->builder()
-		->select('
+		return  $this->select('
 		users.id, 
 		users.`name`, 
 		users.surname, 
@@ -81,10 +80,6 @@ class Users extends Model
 		')
 		->join('auth', 'users.id = auth.user_fk' )
 		->where('users.id', $id)
-		->where('users.deleted_at', null)
-		->get()
-		->getRowArray();
-		$entity = new \App\Entities\Users($data);
-		return $entity;
+		->first();
 	}
 }
