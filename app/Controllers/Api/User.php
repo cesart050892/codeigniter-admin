@@ -156,56 +156,37 @@ class User extends ResourceController
 
     public function update($id = null)
     {
-        try {
-            $rules_income = [ // Rules validations
-                'name' => 'required'
-            ];
-            if ($this->validate($rules_income)) { // Execute validation
-                unset($rules_income);
-                $data = [
-                    "name"        => $this->request->getVar("name"),
-                    "surname"    => $this->request->getVar("surname"),
-                    'display'         =>    ''
-                ];
-                $userData = $this->model->getOne($id);
-                if ($this->validate(['image' => 'uploaded[image]|max_size[image,2048]'])) {
-                    $base_dir = realpath($_SERVER["DOCUMENT_ROOT"]);
-                    if ($userData->img != '/img/default/profile.jpg') {
-                        $file_delete =  "$base_dir/$userData->img";
-                        if (file_exists($file_delete)) {
-                            if (unlink($file_delete)) {
-                                $image = true;
-                            }
-                        }
-                    }
-                    $file = $this->request->getFile('image');
-                    if ($file->isValid() && !$file->hasMoved()) {
-                        $route = ['/img/users', $userData->nick . "." . $file->getExtension()];
-                        $file->move("." . $route[0], $route[1]);
-                        $data += ['img'         =>    $route[0] . "/" . $route[1]];
-                    }
-                } else {
-                    return $this->failValidationErrors('Image is no valid!');
-                }
-                $user = new \App\Entities\Users($data);
-                $user->id = $this->request->getVar("id");
-                if ($this->model->save($user)) {
-                    unset($data);
-                    return $this->respond(array(
-                        "status"    => 200,
-                        "message"     => "Welcome! " . $userData->username,
-                        "data"        => [
-                            "username"     => $userData->username
-                        ]
-                    ));
-                } else {
-                    return $this->fail($this->model->validator->getErrors());
-                }
-            } else {
-                return $this->fail($this->validator->getErrors());
-            }
-        } catch (\Throwable $e) {
-            return $this->failServerError($e->getMessage());
+        // las reglas de validacion podrias reutilizarlas tanto para crear / actualizar investiga sobre el tema
+        if (!$this->validate([ 
+            "name" => 'required|max_length[75]',
+            "surname"  => 'permit_empty|max_length[75]',
+            "image" => 'is_image[image]|max_size[image,1024]' // moidifique el JS para aceptar pdf y testear la validacion
+        ])) {
+            return $this->failValidationErrors($this->validator->getErrors());
         }
+
+        if (!$user = $this->model->getOne($id)) {
+            return $this->failNotFound();
+        }
+
+        $file = $this->request->getFile('image');
+
+        if ($file->isValid()) { // el usuario cambio la imagen
+
+            if (!$newImage = $user->saveProfileImage($file)) {
+                return $this->failValidationErrors('Image is no valid!');
+            }
+
+            $user->img = $newImage;
+        }
+
+        $user = $user->fill($this->request->getPost(['surname', 'name']));
+
+        if (! $this->model->save($user)) {
+			return $this->failValidationErrors($this->postModel->errors());
+		}
+
+        return $this->respondUpdated(['message' => 'ok!']); 
+
     }
 }

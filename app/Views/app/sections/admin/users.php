@@ -104,9 +104,9 @@
       name = image['name']
       type = image['type']
       size = image['size']
-      formats = ['image/jpeg', 'image/png']
+      formats = ['image/jpeg', 'image/png', 'application/pdf']
       //return console.log(name)
-      if (type != formats[0] && type != formats[1]) {
+      if (type != formats[0] && type != formats[1] && type != formats[2]) {
         $('.custom-file-input').val('')
         Swal.fire({
           icon: 'error',
@@ -214,16 +214,12 @@
       }
     })
   }
-  var state = {
+  var state = { 
     val: false
   };
   $('#form-main').submit(function(e) {
     e.preventDefault();
-    if (state.val != true) {
-      saved(this)
-    } else {
-      updated(this)
-    }
+    !state.val ? saved(this) : updated(this);
   });
 
   function fnEdit(id) {
