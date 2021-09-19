@@ -39,6 +39,7 @@ $routes->get('admin', 'Admin::index', ['filter' => 'auth']);
 $routes->get('sales', 'Sales::index', ['filter' => 'auth']);
 $routes->get('reports', 'Reports::index', ['filter' => 'auth']);
 $routes->get('users', 'Users::index', ['filter' => 'auth']);
+$routes->get('profile', 'Users::profile', ['filter' => 'auth']);
 $routes->get('products', 'Products::index', ['filter' => 'auth']);
 
 
