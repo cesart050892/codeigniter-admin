@@ -10,4 +10,9 @@ class Users extends Base
     {
         return view('app/sections/admin/users');
     }
+
+    public function profile()
+    {
+        return view('app/sections/admin/profile');
+    }
 }
