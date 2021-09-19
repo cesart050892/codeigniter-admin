@@ -73,8 +73,7 @@ class User extends ResourceController
     {
         try {
             //
-            $user = $this->model->find(session()->user_id);
-            $user->ignorePass();
+            $user = $this->model->getOne(session()->user_id);
             return $this->respond($user);
         } catch (\Throwable $th) {
             //throw $th;
