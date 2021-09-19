@@ -36,6 +36,15 @@
                         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                         <li class="nav-item">
+                            <a href="profile" class="nav-link">
+                                <i class="nav-icon fas fa-copy"></i>
+                                <p>
+                                    Profile
+                                    <span class="badge badge-info right">6</span>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="users" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
