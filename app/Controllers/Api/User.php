@@ -44,8 +44,8 @@ class User extends ResourceController
                         "password"    => $this->request->getVar("password"),
                         "user_fk"     => $this->model->insertID()
                     ];
-                    $authModel = model('App\Models\Auth', false);
-                    if ($authModel->save($data)) {
+                    $this->authModel = model('App\Models\Auth', false);
+                    if ($this->authModel->save($data)) {
                         $this->db->transComplete();
                         return $this->respond(array(
                             "status"    => 200,
@@ -56,7 +56,7 @@ class User extends ResourceController
                             ]
                         ));
                     } else {
-                        return $this->fail($authModel->validator->getErrors());
+                        return $this->fail($this->authModel->validator->getErrors());
                     }
                 } else {
                     return $this->fail($this->model->validator->getErrors());
@@ -156,36 +156,39 @@ class User extends ResourceController
     public function update($id = null)
     {
         // las reglas de validacion podrias reutilizarlas tanto para crear / actualizar investiga sobre el tema
-        if (!$this->validate([ 
-            "name" => 'required|max_length[75]',
-            "surname"  => 'permit_empty|max_length[75]',
-            "image" => 'is_image[image]|max_size[image,1024]' // moidifique el JS para aceptar pdf y testear la validacion
-        ])) {
-            return $this->failValidationErrors($this->validator->getErrors());
-        }
+            if (!$this->validate([
+                "name" => 'required|max_length[75]',
+                "surname"  => 'permit_empty|max_length[75]',
 
-        if (!$user = $this->model->getOne($id)) {
-            return $this->failNotFound();
-        }
-
-        $file = $this->request->getFile('image');
-
-        if ($file->isValid()) { // el usuario cambio la imagen
-
-            if (!$newImage = $user->saveProfileImage($file)) {
-                return $this->failValidationErrors('Image is no valid!');
+            ])) {
+                return $this->failValidationErrors($this->validator->getErrors());
             }
 
-            $user->img = $newImage;
-        }
+            if (!$user = $this->model->getOne($id)) {
+                return $this->failNotFound();
+            }
 
-        $user = $user->fill($this->request->getPost(['surname', 'name']));
+            if ($file = $this->request->getFile('image')) {
+                if ($this->validate([
+                    "image" => 'is_image[image]|max_size[image,1024]|permit_empty' // moidifique el JS para aceptar pdf y testear la validacion
+                ])) {
+                    if ($file->isValid()) { // el usuario cambio la imagen
+                        if (!$newImage = $user->saveProfileImage($file)) {
+                            return $this->failValidationErrors('Image is no valid!');
+                        }
+                        $user->img = $newImage;
+                    }
+                }
+            }
 
-        if (! $this->model->save($user)) {
-			return $this->failValidationErrors($this->postModel->errors());
-		}
+            $user = $user->fill($this->request->getPost(['surname', 'name', 'phone']));
+            
 
-        return $this->respondUpdated(['message' => 'ok!']); 
+            if (!$this->model->save($user)) {
+                return $this->failValidationErrors($this->model->errors());
+            }
+
+            return $this->respondUpdated(['message' => 'ok!']);
 
     }
 }

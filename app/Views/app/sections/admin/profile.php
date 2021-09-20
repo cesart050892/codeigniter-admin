@@ -53,7 +53,7 @@
           </div>
           <!-- Profile Settings-->
           <div class="col-lg-8 pb-5">
-            <form class="row">
+            <form class="row" autocomplete="off">
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="account-fn">First Name</label>
@@ -93,7 +93,7 @@
               <div class="col-12">
                 <hr class="mt-2 mb-3">
                 <div class="d-flex flex-wrap justify-content-between align-items-center">
-                  <button class="btn btn-style-1 btn-primary" type="button" data-toast="" data-toast-position="topRight" data-toast-type="success" data-toast-icon="fe-icon-check-circle" data-toast-title="Success!" data-toast-message="Your profile updated successfuly.">Update Profile</button>
+                  <button class="btn btn-primary" type="submit">Update Profile</button>
                 </div>
               </div>
             </form>
@@ -121,6 +121,7 @@
 
 <?= $this->section('script') ?>
 <script>
+  var id;
   $(function() {
     $.ajax({
       type: "GET",
@@ -134,9 +135,50 @@
         $('.user-joined').text('Joined ' + moment(response.created_at.date).fromNow())
         $('.user-img').attr('src', response.img)
         $('.user-img').attr('alt', response.fullname)
-        console.log(response)
+        id = response.id
       }
     });
+  });
+
+  $('form').submit(function(e) {
+    e.preventDefault();
+    person = {
+      id: id,
+      name: $('#account-fn').val(),
+      surname: $('#account-ln').val(),
+      phone: $('#account-phone').val(),
+      password: $('#account-pass').val(),
+      pass_confirm: $('#account-confirm-pass').val(),
+    }
+    if (person.password === person.pass_confirm) {
+      if (person.password === '') {
+        delete person.password;
+        delete person.pass_confirm;
+      }
+      $.ajax({
+        type: "POST",
+        url: baseUrl + "/api/v1/users/edit/" + id,
+        data: person,
+        dataType: 'json',
+        success: function(response) {
+
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          let key = xhr.responseJSON.messages
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong'
+          })
+        }
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong with the pass'
+      })
+    }
   });
 </script>
 <?= $this->endSection() ?>
